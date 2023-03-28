@@ -1,6 +1,6 @@
 {
-    "name": "counter",
-    "short_name": "counter",
+    "name": "بشمار",
+    "short_name": "بشمار",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#hexcode",
