@@ -1,4 +1,4 @@
-package ir.naazeri.counter
+package ir.naazeri.beshmar
 
 import io.flutter.embedding.android.FlutterActivity
 
