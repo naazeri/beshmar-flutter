@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'date.dart';
 import 'permission_helper.dart';
 import 'show.dart';
 
@@ -13,7 +14,7 @@ class Backup {
       return;
     }
 
-    const backupFileName = 'beshmar.backup';
+    final backupFileName = 'beshmar-${Date.getTimeFormatted()}.backup';
 
     try {
       String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
