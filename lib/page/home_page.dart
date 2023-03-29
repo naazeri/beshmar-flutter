@@ -59,51 +59,49 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
   }
 
-  Padding getListView() {
+  Widget getListView() {
     final itemCount = list.length;
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 10.0),
-      child: ReorderableListView.builder(
-        itemCount: itemCount,
-        itemBuilder: (context, i) {
-          return Container(
-            key: Key('$i'),
-            margin:
-                EdgeInsets.fromLTRB(10, 6, 10, (i == itemCount - 1) ? 75 : 6),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade50,
-              borderRadius: BorderRadius.circular(14),
+    return ReorderableListView.builder(
+      header: const SizedBox(height: 10),
+      footer: const SizedBox(height: 75),
+      itemCount: itemCount,
+      itemBuilder: (context, i) {
+        return Container(
+          key: Key('$i'),
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade50,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: ListTile(
+            contentPadding: const EdgeInsets.only(
+              right: 10,
+              left: 0,
+              top: 5,
+              bottom: 5,
             ),
-            child: ListTile(
-              contentPadding: const EdgeInsets.only(
-                right: 10,
-                left: 0,
-                top: 5,
-                bottom: 5,
-              ),
-              trailing: _getListCountView(i),
-              title: Text(
-                list[i].title,
-                style: Styles.textHeader3,
-              ),
-              onTap: () => _showListEditPage(i),
+            trailing: _getListCountView(i),
+            title: Text(
+              list[i].title,
+              style: Styles.textHeader3,
             ),
-          );
-        },
-        onReorder: (int oldIndex, int newIndex) {
-          setState(() {
-            if (oldIndex < newIndex) {
-              newIndex -= 1;
-            }
+            onTap: () => _showListEditPage(i),
+          ),
+        );
+      },
+      onReorder: (int oldIndex, int newIndex) {
+        setState(() {
+          if (oldIndex < newIndex) {
+            newIndex -= 1;
+          }
 
-            final item = list.removeAt(oldIndex);
-            list.insert(newIndex, item);
-          });
+          final item = list.removeAt(oldIndex);
+          list.insert(newIndex, item);
+        });
 
-          _saveData();
-        },
-      ),
+        _saveData();
+      },
     );
   }
 
