@@ -1,9 +1,11 @@
+import 'package:beshmar/utils/backup.dart';
 import 'package:flutter/material.dart';
 import 'package:holding_gesture/holding_gesture.dart';
 
 import '../data/counter_model.dart';
 import '../data/edit_result_model.dart';
 import '../utils/prefs.dart';
+import '../utils/show.dart';
 import '../utils/styles.dart';
 import '../widget/app_bar_title.dart';
 import '../widget/scaffold_rtl.dart';
@@ -18,6 +20,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+enum EditResultType { newItem, updated, deleted }
+
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   List<CounterModel> list = List.empty(growable: true);
 
@@ -25,7 +29,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    loadData();
+    _loadData();
   }
 
   @override
@@ -38,7 +42,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.inactive:
-        saveData();
+        _saveData();
         break;
       default:
     }
@@ -131,7 +135,39 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   AppBar _getAppBar() {
     return AppBar(
       title: AppBarTitle(widget.title),
-      actions: [],
+      leading: PopupMenuButton(
+        // add icon, by default "3 dot" icon
+        // icon: Icon(Icons.book)
+        itemBuilder: (context) {
+          return [
+            const PopupMenuItem<int>(
+              value: 0,
+              child: Text("تنظیمات"),
+            ),
+            const PopupMenuItem<int>(
+              value: 1,
+              child: Text("پشتیبان گیری"),
+            ),
+            const PopupMenuItem<int>(
+              value: 2,
+              child: Text("بازگردانی اطلاعات"),
+            ),
+          ];
+        },
+        onSelected: (value) async {
+          switch (value) {
+            case 0:
+              break;
+            case 1:
+              await Backup.backupData(_getDataAsString(), context);
+              break;
+            case 2:
+              _importData();
+              break;
+            default:
+          }
+        },
+      ),
     );
   }
 
@@ -149,7 +185,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       list[index].count += value;
     });
 
-    saveData();
+    _saveData();
   }
 
   void _showListEditPage(int? index) {
@@ -191,11 +227,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         default:
       }
 
-      saveData();
+      _saveData();
     }
   }
 
-  void loadData() async {
+  void _loadData() async {
     try {
       final result = await Prefs.readData();
       if (result == null) return;
@@ -207,13 +243,37 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     } catch (_) {}
   }
 
-  Future<bool> saveData() async {
+  Future<bool> _saveData() async {
     try {
-      return await Prefs.saveData(CounterModel.encode(list));
+      return await Prefs.saveData(_getDataAsString());
     } catch (e) {
       return Future<bool>.value(false);
     }
   }
-}
 
-enum EditResultType { newItem, updated, deleted }
+  Future<void> _importData() async {
+    try {
+      final data = await Backup.importData(context);
+
+      if (data == null) {
+        return;
+      }
+
+      var newList = CounterModel.decode(data);
+
+      setState(() {
+        list = newList;
+      });
+
+      _saveData();
+      Show.snackBar(context, 'بازگردانی اطلاعات با موفقیت انجام شد',
+          seconds: 4);
+    } catch (e) {
+      Show.snackBar(context, 'فایل پشتیبان نامعتبر است', seconds: 4);
+    }
+  }
+
+  String _getDataAsString() {
+    return CounterModel.encode(list);
+  }
+}

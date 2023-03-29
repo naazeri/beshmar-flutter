@@ -29,7 +29,7 @@ class _ListEditItemPageState extends State<ListEditItemPage> {
   void initState() {
     titleController = TextEditingController(text: widget.model?.title);
     countController =
-        TextEditingController(text: widget.model?.count.toString() ?? '0');
+        TextEditingController(text: widget.model?.count.toString());
     super.initState();
   }
 

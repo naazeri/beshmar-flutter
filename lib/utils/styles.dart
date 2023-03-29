@@ -15,4 +15,10 @@ class Styles {
     fontFamily: 'Vazir',
     fontSize: 16.0,
   );
+
+  static const textHeader3White = TextStyle(
+    fontFamily: 'Vazir',
+    fontSize: 16.0,
+    color: Colors.white,
+  );
 }
