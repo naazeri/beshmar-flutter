@@ -60,20 +60,27 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   Padding getListView() {
+    final itemCount = list.length;
+
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
+      padding: const EdgeInsets.only(top: 10.0),
       child: ListView.builder(
-        itemCount: list.length,
+        itemCount: itemCount,
         itemBuilder: (context, i) {
           return Container(
-            margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+            margin:
+                EdgeInsets.fromLTRB(10, 6, 10, (i == itemCount - 1) ? 75 : 6),
             decoration: BoxDecoration(
               color: Colors.grey.shade50,
               borderRadius: BorderRadius.circular(14),
             ),
             child: ListTile(
-              contentPadding:
-                  const EdgeInsets.only(right: 10, left: 0, top: 5, bottom: 5),
+              contentPadding: const EdgeInsets.only(
+                right: 10,
+                left: 0,
+                top: 5,
+                bottom: 5,
+              ),
               trailing: _getListCountView(i),
               title: Text(
                 list[i].title,
@@ -88,7 +95,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   Row _getListCountView(int i) {
-    const holdTimeout = 100;
+    const holdTimeout = 200;
 
     return Row(
       mainAxisSize: MainAxisSize.min,
