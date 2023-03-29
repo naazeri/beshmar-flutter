@@ -9,6 +9,7 @@ class MyTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final bool digitsOnly;
+  final int? maxLength;
   final String? Function(String?)? validator;
   final Function? onFieldSubmitted;
 
@@ -19,6 +20,7 @@ class MyTextFormField extends StatelessWidget {
     this.validator,
     this.keyboardType,
     this.digitsOnly = true,
+    this.maxLength,
     this.onFieldSubmitted,
     Key? key,
   }) : super(key: key);
@@ -38,6 +40,7 @@ class MyTextFormField extends StatelessWidget {
       onFieldSubmitted: (_) => onFieldSubmitted!(),
       inputFormatters: inputFormatters,
       validator: validator,
+      maxLength: maxLength,
       style: Styles.textHeader3,
       keyboardType: keyboardType,
       decoration: InputDecoration(
