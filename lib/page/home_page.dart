@@ -64,10 +64,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     return Padding(
       padding: const EdgeInsets.only(top: 10.0),
-      child: ListView.builder(
+      child: ReorderableListView.builder(
         itemCount: itemCount,
         itemBuilder: (context, i) {
           return Container(
+            key: Key('$i'),
             margin:
                 EdgeInsets.fromLTRB(10, 6, 10, (i == itemCount - 1) ? 75 : 6),
             decoration: BoxDecoration(
@@ -89,6 +90,18 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               onTap: () => _showListEditPage(i),
             ),
           );
+        },
+        onReorder: (int oldIndex, int newIndex) {
+          setState(() {
+            if (oldIndex < newIndex) {
+              newIndex -= 1;
+            }
+
+            final item = list.removeAt(oldIndex);
+            list.insert(newIndex, item);
+          });
+
+          _saveData();
         },
       ),
     );
