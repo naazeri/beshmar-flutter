@@ -17,6 +17,8 @@ class Backup {
     final backupFileName = 'beshmar-${Date.getTimeFormatted()}.backup';
 
     try {
+      await FilePicker.platform.clearTemporaryFiles();
+
       String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
 
       if (selectedDirectory == null) {
@@ -29,7 +31,7 @@ class Backup {
 
       Show.snackBar(context, 'پشتیبان گیری با موفقیت انجام شد');
     } catch (e) {
-      Show.snackBar(context, 'خطا در پشتیبان گیری', seconds: 4);
+      Show.snackBar(context, 'خطا. آدرس متفاوتی رو امتحان کنید', seconds: 5);
     }
   }
 
@@ -39,6 +41,8 @@ class Backup {
     }
 
     try {
+      await FilePicker.platform.clearTemporaryFiles();
+
       final result = await FilePicker.platform.pickFiles(
         dialogTitle: 'انتخاب فایل پشتیبان',
       );

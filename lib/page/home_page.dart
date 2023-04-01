@@ -1,6 +1,7 @@
-import 'package:beshmar/utils/backup.dart';
 import 'package:flutter/material.dart';
+import 'package:beshmar/utils/backup.dart';
 import 'package:holding_gesture/holding_gesture.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../data/counter_model.dart';
 import '../data/edit_result_model.dart';
@@ -9,6 +10,7 @@ import '../utils/show.dart';
 import '../utils/styles.dart';
 import '../widget/app_bar_title.dart';
 import '../widget/scaffold_rtl.dart';
+import 'help_page.dart';
 import 'list_edit_item_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -158,29 +160,41 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         // icon: Icon(Icons.book)
         itemBuilder: (context) {
           return [
-            const PopupMenuItem<int>(
-              value: 0,
-              child: Text("تنظیمات"),
-            ),
+            // const PopupMenuItem<int>(
+            //   value: 0,
+            //   child: Text("تنظیمات"),
+            // ),
             const PopupMenuItem<int>(
               value: 1,
-              child: Text("پشتیبان گیری"),
+              child: Text("پشتیبان گیری اطلاعات"),
             ),
             const PopupMenuItem<int>(
               value: 2,
               child: Text("بازگردانی اطلاعات"),
             ),
+            const PopupMenuItem<int>(
+              value: 3,
+              child: Text('راهنما'),
+            ),
+            const PopupMenuItem<int>(
+              value: 4,
+              child: Text('درباره ما'),
+            ),
           ];
         },
         onSelected: (value) async {
           switch (value) {
-            case 0:
-              break;
             case 1:
               await Backup.backupData(_getDataAsString(), context);
               break;
             case 2:
               _importData();
+              break;
+            case 3:
+              _showHelpPage();
+              break;
+            case 4:
+              _launchUrl('https://naazeri.ir/');
               break;
             default:
           }
@@ -216,6 +230,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         ),
       ),
     ).then(_onNavigatorResult);
+  }
+
+  void _showHelpPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const HelpPage(),
+      ),
+    );
   }
 
   void _onNavigatorResult(dynamic result) {
@@ -293,5 +316,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   String _getDataAsString() {
     return CounterModel.encode(list);
+  }
+
+  Future<void> _launchUrl(String url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      Show.snackBar(context, 'خطا در اجرای عملیات');
+    }
   }
 }

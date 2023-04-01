@@ -69,6 +69,7 @@ class _ListEditItemPageState extends State<ListEditItemPage> {
                 icon: Icons.numbers_rounded,
                 controller: countController,
                 maxLength: 7,
+                textAlign: TextAlign.center,
                 validator: _countFieldValidator,
                 keyboardType: TextInputType.number,
                 onFieldSubmitted: _onSubmitPressed,

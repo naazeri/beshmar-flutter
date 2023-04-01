@@ -10,6 +10,7 @@ class MyTextFormField extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool digitsOnly;
   final int? maxLength;
+  final TextAlign textAlign;
   final String? Function(String?)? validator;
   final Function? onFieldSubmitted;
 
@@ -21,6 +22,7 @@ class MyTextFormField extends StatelessWidget {
     this.keyboardType,
     this.digitsOnly = true,
     this.maxLength,
+    this.textAlign = TextAlign.start,
     this.onFieldSubmitted,
     Key? key,
   }) : super(key: key);
@@ -41,6 +43,7 @@ class MyTextFormField extends StatelessWidget {
       inputFormatters: inputFormatters,
       validator: validator,
       maxLength: maxLength,
+      textAlign: textAlign,
       style: Styles.textHeader3,
       keyboardType: keyboardType,
       decoration: InputDecoration(
