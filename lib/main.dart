@@ -1,4 +1,7 @@
+import 'package:beshmar/utils/prefs.dart';
+import 'package:beshmar/utils/showcase_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 import 'page/home_page.dart';
 
@@ -26,7 +29,20 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.blue.shade900,
         ),
       ),
-      home: HomePage(title: title),
+      home: ShowCaseWidget(
+        autoPlayDelay: const Duration(seconds: 3),
+        builder: Builder(
+          builder: (context) => HomePage(title: title),
+        ),
+        onComplete: (index, key) {
+          if (index == ShowcaseHelper.keyList.length - 1) {
+            Prefs.setShowcaseStatus(true);
+          }
+        },
+        onFinish: () {
+          debugPrint('**** all showcases finished');
+        },
+      ),
     );
   }
 }
