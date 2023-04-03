@@ -9,6 +9,7 @@ class PermissionHelper {
       return true;
     }
 
+    // ignore: use_build_context_synchronously
     Show.snackBar(context, 'دسترسی مورد نیاز داده نشده است');
     return false;
   }

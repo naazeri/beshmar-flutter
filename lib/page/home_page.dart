@@ -14,6 +14,8 @@ import '../widget/app_bar_title.dart';
 import '../widget/scaffold_rtl.dart';
 import 'list_edit_item_page.dart';
 
+enum EditResultType { newItem, updated, deleted }
+
 class HomePage extends StatefulWidget {
   final String title;
 
@@ -23,16 +25,43 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-enum EditResultType { newItem, updated, deleted }
+class _HomePageState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return ShowCaseWidget(
+      autoPlayDelay: const Duration(seconds: 3),
+      builder: Builder(
+        builder: (context) => MyListView(title: widget.title),
+      ),
+      onComplete: (index, key) {
+        if (index == ShowcaseHelper.keyList.length - 1) {
+          Prefs.setShowcaseStatus(true);
+        }
+      },
+    );
+  }
+}
 
-class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
-  List<CounterModel> list = List.empty(growable: true);
+class MyListView extends StatefulWidget {
+  final String title;
 
+  const MyListView({required this.title, super.key});
+
+  @override
+  State<MyListView> createState() => _MyListViewState();
+}
+
+class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _loadData();
+
+    if (!ShowcaseHelper.seen) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ShowCaseWidget.of(context).startShowCase(ShowcaseHelper.keyList);
+      });
+    }
   }
 
   @override
@@ -55,7 +84,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    final itemCount = list.length;
+    final itemCount = CounterModel.list.length;
+
     return ScaffoldRTL(
       appBar: _getAppBar(),
       body: ReorderableListView.builder(
@@ -63,6 +93,30 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         footer: const SizedBox(height: 75),
         itemCount: itemCount,
         itemBuilder: (context, i) {
+          Widget listTile = ListTile(
+            contentPadding: const EdgeInsets.only(
+              right: 10,
+              left: 0,
+              top: 5,
+              bottom: 5,
+            ),
+            trailing: _getListCountView(i),
+            title: Text(
+              CounterModel.list[i].title,
+              style: Styles.textHeader3,
+            ),
+            onTap: () => _showListEditPage(i),
+          );
+
+          if (!ShowcaseHelper.seen && i == 0) {
+            listTile = Showcase(
+              key: ShowcaseHelper.keyList[2],
+              title: 'ویرایش',
+              description: 'با زدن روی هر آیتم، اون رو ویرایش کنید',
+              child: listTile,
+            );
+          }
+
           return Container(
             key: Key('$i'),
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -70,25 +124,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               color: Colors.grey.shade50,
               borderRadius: BorderRadius.circular(14),
             ),
-            child: Showcase(
-              key: ShowcaseHelper.keyList[2],
-              title: 'ویرایش',
-              description: 'با زدن روی هر آیتم، اون رو ویرایش کنید',
-              child: ListTile(
-                contentPadding: const EdgeInsets.only(
-                  right: 10,
-                  left: 0,
-                  top: 5,
-                  bottom: 5,
-                ),
-                trailing: _getListCountView(i),
-                title: Text(
-                  list[i].title,
-                  style: Styles.textHeader3,
-                ),
-                onTap: () => _showListEditPage(i),
-              ),
-            ),
+            child: listTile,
           );
         },
         onReorder: (int oldIndex, int newIndex) {
@@ -97,8 +133,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               newIndex -= 1;
             }
 
-            final item = list.removeAt(oldIndex);
-            list.insert(newIndex, item);
+            final item = CounterModel.list.removeAt(oldIndex);
+            CounterModel.list.insert(newIndex, item);
           });
 
           _saveData();
@@ -111,30 +147,36 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   Row _getListCountView(int i) {
     const holdTimeout = 100;
 
+    Widget addButton = HoldDetector(
+      onHold: () => _addNumber(i, 1, needSave: false),
+      onCancel: () {
+        _saveData();
+      },
+      holdTimeout: const Duration(milliseconds: holdTimeout),
+      child: IconButton(
+        onPressed: () => _addNumber(i, 1),
+        icon: Icon(
+          Icons.add_circle_outline_rounded,
+          color: Theme.of(context).primaryColor,
+          size: 28.0,
+        ),
+      ),
+    );
+
+    if (!ShowcaseHelper.seen && i == 0) {
+      addButton = Showcase(
+        key: ShowcaseHelper.keyList[1],
+        title: 'افزایش',
+        description:
+            'با نگه داشتن این دکمه با سرعت بیشتری تعداد رو افزایش بدین',
+        child: addButton,
+      );
+    }
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Showcase(
-          key: ShowcaseHelper.keyList[1],
-          title: 'افزایش',
-          description:
-              'با نگه داشتن این دکمه با سرعت بیشتری تعداد رو افزایش بدین',
-          child: HoldDetector(
-            onHold: () => _addNumber(i, 1, needSave: false),
-            onCancel: () {
-              _saveData();
-            },
-            holdTimeout: const Duration(milliseconds: holdTimeout),
-            child: IconButton(
-              onPressed: () => _addNumber(i, 1),
-              icon: Icon(
-                Icons.add_circle_outline_rounded,
-                color: Theme.of(context).primaryColor,
-                size: 28.0,
-              ),
-            ),
-          ),
-        ),
+        addButton,
         Container(
           padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
           decoration: BoxDecoration(
@@ -142,7 +184,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             borderRadius: BorderRadius.circular(200),
           ),
           child: Text(
-            list[i].count.toString(),
+            CounterModel.list[i].count.toString(),
             style: Styles.textHeader3,
           ),
         ),
@@ -221,10 +263,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   void _addNumber(int index, int value, {bool needSave = true}) {
-    if (list[index].count + value < 0) return;
+    if (CounterModel.list[index].count + value < 0) return;
 
     setState(() {
-      list[index].count += value;
+      CounterModel.list[index].count += value;
     });
 
     if (needSave) {
@@ -237,7 +279,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       context,
       MaterialPageRoute(
         builder: (context) => ListEditItemPage(
-          model: index != null ? list[index] : null,
+          model: index != null ? CounterModel.list[index] : null,
           index: index,
         ),
       ),
@@ -250,21 +292,21 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         case EditResultType.newItem:
           if (result.model != null) {
             setState(() {
-              list.add(result.model!);
+              CounterModel.list.add(result.model!);
             });
           }
           break;
         case EditResultType.updated:
           if (result.model != null && result.index != null) {
             setState(() {
-              list[result.index!] = result.model!;
+              CounterModel.list[result.index!] = result.model!;
             });
           }
           break;
         case EditResultType.deleted:
           if (result.index != null) {
             setState(() {
-              list.removeAt(result.index!);
+              CounterModel.list.removeAt(result.index!);
             });
           }
           break;
@@ -275,27 +317,21 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
   }
 
-  void _loadData() async {
-    try {
-      ShowcaseHelper.seen = await Prefs.getShowcaseStatus();
+  // void _loadData() async {
+  //   try {
+  //     // ShowcaseHelper.seen = await Prefs.getShowcaseStatus();
 
-      if (!ShowcaseHelper.seen) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          ShowCaseWidget.of(context).startShowCase(ShowcaseHelper.keyList);
-        });
-      }
+  //     final result = await Prefs.getData();
 
-      final result = await Prefs.getData();
+  //     if (result == null) return;
 
-      if (result == null) return;
+  //     var newList = CounterModel.decode(result);
 
-      var newList = CounterModel.decode(result);
-
-      setState(() {
-        list = newList;
-      });
-    } catch (_) {}
-  }
+  //     setState(() {
+  //       list = newList;
+  //     });
+  //   } catch (_) {}
+  // }
 
   Future<bool> _saveData() async {
     try {
@@ -316,23 +352,28 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       var newList = CounterModel.decode(data);
 
       setState(() {
-        list = newList;
+        CounterModel.list = newList;
       });
 
       _saveData();
-      Show.snackBar(context, 'بازگردانی اطلاعات با موفقیت انجام شد',
-          seconds: 4);
+      // ignore: use_build_context_synchronously
+      Show.snackBar(
+        context,
+        'بازگردانی اطلاعات با موفقیت انجام شد',
+        seconds: 4,
+      );
     } catch (e) {
       Show.snackBar(context, 'فایل پشتیبان نامعتبر است', seconds: 4);
     }
   }
 
   String _getDataAsString() {
-    return CounterModel.encode(list);
+    return CounterModel.encode(CounterModel.list);
   }
 
   Future<void> _launchUrl(String url) async {
     if (!await launchUrl(Uri.parse(url))) {
+      // ignore: use_build_context_synchronously
       Show.snackBar(context, 'خطا در اجرای عملیات');
     }
   }

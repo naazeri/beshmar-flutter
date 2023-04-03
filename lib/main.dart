@@ -1,12 +1,27 @@
+import 'package:flutter/material.dart';
 import 'package:beshmar/utils/prefs.dart';
 import 'package:beshmar/utils/showcase_helper.dart';
-import 'package:flutter/material.dart';
-import 'package:showcaseview/showcaseview.dart';
 
+import 'data/counter_model.dart';
 import 'page/home_page.dart';
+import 'page/introduction_page.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await loadData();
+
   runApp(const MyApp());
+}
+
+Future<void> loadData() async {
+  ShowcaseHelper.seen = await Prefs.getShowcaseStatus();
+
+  final result = await Prefs.getData();
+
+  if (result != null) {
+    CounterModel.list = CounterModel.decode(result);
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -29,20 +44,23 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.blue.shade900,
         ),
       ),
-      home: ShowCaseWidget(
-        autoPlayDelay: const Duration(seconds: 3),
-        builder: Builder(
-          builder: (context) => HomePage(title: title),
-        ),
-        onComplete: (index, key) {
-          if (index == ShowcaseHelper.keyList.length - 1) {
-            Prefs.setShowcaseStatus(true);
-          }
-        },
-        onFinish: () {
-          debugPrint('**** all showcases finished');
-        },
-      ),
+      home: ShowcaseHelper.seen
+          ? HomePage(title: title)
+          : IntroductionPage(homeTitle: title),
+      // home: ShowCaseWidget(
+      //   autoPlayDelay: const Duration(seconds: 3),
+      //   builder: Builder(
+      //     builder: (context) => HomePage(title: title),
+      //   ),
+      //   onComplete: (index, key) {
+      //     if (index == ShowcaseHelper.keyList.length - 1) {
+      //       Prefs.setShowcaseStatus(true);
+      //     }
+      //   },
+      //   onFinish: () {
+      //     debugPrint('**** all showcases finished');
+      //   },
+      // ),
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 class CounterModel {
+  static List<CounterModel> list = List.empty(growable: true);
+
   String title;
   int count;
 

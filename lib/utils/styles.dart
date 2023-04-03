@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class Styles {
   static const textHeader1 = TextStyle(
     fontFamily: 'Vazir',
-    fontSize: 20.0,
+    fontSize: 24.0,
+    fontWeight: FontWeight.bold,
   );
 
   static const textHeader2 = TextStyle(
