@@ -112,8 +112,13 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
             listTile = Showcase(
               key: ShowcaseHelper.keyList[2],
               title: 'ویرایش',
-              description: 'با زدن روی هر آیتم، اون رو ویرایش کنید',
-              child: listTile,
+              description: 'با زدن روی هر آیتم، میشه اون رو ویرایش کرد',
+              child: Showcase(
+                key: ShowcaseHelper.keyList[3],
+                title: 'ترتیب',
+                description: 'با نگه داشتن روی آیتم، میشه جا به جاش کرد',
+                child: listTile,
+              ),
             );
           }
 
@@ -168,7 +173,7 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
         key: ShowcaseHelper.keyList[1],
         title: 'افزایش',
         description:
-            'با نگه داشتن این دکمه با سرعت بیشتری تعداد رو افزایش بدین',
+            'با نگه داشتن این دکمه با سرعت بیشتری تعداد افزایش پیدا میکنه',
         child: addButton,
       );
     }
@@ -254,7 +259,7 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
   Widget _getFloatingActionButton() {
     return Showcase(
       key: ShowcaseHelper.keyList[0],
-      description: 'یک آیتم جدید اضافه کنید',
+      description: 'یک آیتم جدید اضافه کن',
       child: FloatingActionButton(
         child: const Icon(Icons.add_rounded),
         onPressed: () => _showListEditPage(null),

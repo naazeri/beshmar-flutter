@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ShowcaseHelper {
-  static List<GlobalKey> keyList = List.generate(3, (index) => GlobalKey());
+  static List<GlobalKey> keyList = List.generate(4, (index) => GlobalKey());
   static bool seen = false;
 
   // static List<ShowcaseModel> caseList =
