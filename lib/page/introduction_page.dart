@@ -62,10 +62,22 @@ class IntroductionPage extends StatelessWidget {
       PageViewModel(
         title: "کتاب صوتی",
         body:
-            "فرض کن بخوای ۵ بار هر فصل کتاب رو گوش کنی بعد بری فصل بعد. میتونی تعدادشو توی اپ وارد کنی تا یادت بمونه چند بار تکرارش کردی",
+            "فرض کن بخوای ۵ بار هر فصل کتاب رو گوش کنی بعدش بری فصل بعد. میتونی تعدادشو توی اپ وارد کنی تا یادت بمونه چند بار تکرارش کردی",
         image: getImage(
           context,
           Icons.headphones_outlined,
+          borderRadius,
+          imageWidth,
+        ),
+        decoration: pageDecoration,
+      ),
+      PageViewModel(
+        title: "درس و کنکور",
+        body:
+            'اگه میخوای برای کنکور درس ها رو چند بار مرور کنی میتونی تعدادشو وارد کنی تا به اندازه مدنظرت مرورشون کنی',
+        image: getImage(
+          context,
+          Icons.menu_book_rounded,
           borderRadius,
           imageWidth,
         ),
