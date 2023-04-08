@@ -270,6 +270,28 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
           }
         },
       ),
+      actions: [
+        Showcase(
+          key: ShowcaseHelper.keyList[4],
+          title: 'قفل',
+          description:
+              'برای اینکه اشتباهی دستت نخوره و تعداد رو تغییر بدی می تونی قفلش کنی',
+          child: IconButton(
+            icon: Icon(
+              AppConfig.isCountingLocked
+                  ? Icons.lock_rounded
+                  : Icons.lock_open_rounded,
+            ),
+            onPressed: () {
+              setState(() {
+                AppConfig.isCountingLocked = !AppConfig.isCountingLocked;
+                Prefs.setCountingLock(AppConfig.isCountingLocked);
+              });
+            },
+          ),
+        ),
+        const SizedBox(width: 30),
+      ],
     );
   }
 
@@ -314,7 +336,14 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
   }
 
   void _addNumber(int index, int value, {bool needSave = true}) {
-    if (CounterModel.list[index].count + value < 0) return;
+    if (AppConfig.isCountingLocked) {
+      Show.snackBar(context, 'اعداد قفل شدن', seconds: 1, clearQueue: true);
+      return;
+    }
+
+    if (CounterModel.list[index].count + value < 0) {
+      return;
+    }
 
     setState(() {
       CounterModel.list[index].count += value;
@@ -367,22 +396,6 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
       _saveData();
     }
   }
-
-  // void _loadData() async {
-  //   try {
-  //     // ShowcaseHelper.seen = await Prefs.getShowcaseStatus();
-
-  //     final result = await Prefs.getData();
-
-  //     if (result == null) return;
-
-  //     var newList = CounterModel.decode(result);
-
-  //     setState(() {
-  //       list = newList;
-  //     });
-  //   } catch (_) {}
-  // }
 
   Future<bool> _saveData() async {
     try {

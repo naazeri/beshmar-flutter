@@ -18,6 +18,7 @@ Future<void> main() async {
 Future<void> loadData() async {
   ShowcaseHelper.seen = await Prefs.getShowcaseStatus();
   AppConfig.isFullVersion = await Prefs.getFullVersionStatus();
+  AppConfig.isCountingLocked = await Prefs.getCountingLock();
 
   final result = await Prefs.getData();
 

@@ -4,6 +4,7 @@ class Prefs {
   static const _dataKey = 'data';
   static const _showcaseKey = 'showcase_seen';
   static const _iabKey = 'iab';
+  static const _countingLockKey = 'c_lock';
 
   static Future<bool> setData(String data) async {
     final prefs = await SharedPreferences.getInstance();
@@ -33,6 +34,16 @@ class Prefs {
   static Future<bool> getFullVersionStatus() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_iabKey) ?? false;
+  }
+
+  static Future<bool> setCountingLock(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    return await prefs.setBool(_countingLockKey, value);
+  }
+
+  static Future<bool> getCountingLock() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_countingLockKey) ?? false;
   }
 
   void remove(String key) async {
