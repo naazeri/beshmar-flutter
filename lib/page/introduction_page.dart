@@ -52,7 +52,7 @@ class IntroductionPage extends StatelessWidget {
     return [
       PageViewModel(
         title: "هر چیزی رو بشمار",
-        body: 'چه افزایشی چه کاهشی',
+        body: 'چه به صورت افزایشی چه کاهشی',
         image: Image.asset(
           'asset/image/icon.png',
           width: imageWidth + 30,
