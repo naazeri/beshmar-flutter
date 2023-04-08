@@ -287,8 +287,13 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
               'نسخه کامل',
               'برای اضافه کردن بیش از 3 آیتم نسخه کامل برنامه رو خریداری کنید',
               [
+                TextButton(
+                  child: const Text('انصراف'),
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  },
+                ),
                 ElevatedButton(
-                  // style: ElevatedButton.styleFrom(),
                   child: const Text('خرید'),
                   onPressed: () async {
                     Navigator.pop(context);
