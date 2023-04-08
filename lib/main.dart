@@ -1,10 +1,11 @@
+import 'package:beshmar/data/app_config.dart';
 import 'package:flutter/material.dart';
-import 'package:beshmar/utils/prefs.dart';
-import 'package:beshmar/utils/showcase_helper.dart';
 
 import 'data/counter_model.dart';
 import 'page/home_page.dart';
 import 'page/introduction_page.dart';
+import 'utils/prefs.dart';
+import 'utils/showcase_helper.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +17,7 @@ Future<void> main() async {
 
 Future<void> loadData() async {
   ShowcaseHelper.seen = await Prefs.getShowcaseStatus();
+  AppConfig.isFullVersion = await Prefs.getFullVersionStatus();
 
   final result = await Prefs.getData();
 
@@ -33,7 +35,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: title,
-      // debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       theme: ThemeData(
         appBarTheme: AppBarTheme(
           color: Colors.blue.shade600,

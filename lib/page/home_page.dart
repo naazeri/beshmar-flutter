@@ -3,9 +3,11 @@ import 'package:showcaseview/showcaseview.dart';
 import 'package:holding_gesture/holding_gesture.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../data/app_config.dart';
 import '../data/counter_model.dart';
 import '../data/edit_result_model.dart';
 import '../utils/backup.dart';
+import '../utils/iab.dart';
 import '../utils/prefs.dart';
 import '../utils/show.dart';
 import '../utils/showcase_helper.dart';
@@ -57,6 +59,8 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
+    _initIab();
+
     if (!ShowcaseHelper.seen) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ShowCaseWidget.of(context).startShowCase(ShowcaseHelper.keyList);
@@ -64,9 +68,20 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
     }
   }
 
+  Future<void> _initIab() async {
+    await Iab.init();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final result = await Iab.checkIsFullVersionProduct();
+      AppConfig.isFullVersion = result;
+      Prefs.setFullVersionStatus(result);
+      debugPrint('*** Full version: $result');
+    });
+  }
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    Iab.dispose();
     super.dispose();
   }
 
@@ -92,46 +107,7 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
         header: const SizedBox(height: 10),
         footer: const SizedBox(height: 75),
         itemCount: itemCount,
-        itemBuilder: (context, i) {
-          Widget listTile = ListTile(
-            contentPadding: const EdgeInsets.only(
-              right: 10,
-              left: 0,
-              top: 5,
-              bottom: 5,
-            ),
-            trailing: _getListCountView(i),
-            title: Text(
-              CounterModel.list[i].title,
-              style: Styles.textHeader3,
-            ),
-            onTap: () => _showListEditPage(i),
-          );
-
-          if (!ShowcaseHelper.seen && i == 0) {
-            listTile = Showcase(
-              key: ShowcaseHelper.keyList[2],
-              title: 'ویرایش',
-              description: 'با زدن روی هر آیتم، میشه اون رو ویرایش کرد',
-              child: Showcase(
-                key: ShowcaseHelper.keyList[3],
-                title: 'ترتیب',
-                description: 'با نگه داشتن روی آیتم، میشه جا به جاش کرد',
-                child: listTile,
-              ),
-            );
-          }
-
-          return Container(
-            key: Key('$i'),
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade50,
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: listTile,
-          );
-        },
+        itemBuilder: (context, i) => _getListItemView(i),
         onReorder: (int oldIndex, int newIndex) {
           setState(() {
             if (oldIndex < newIndex) {
@@ -145,7 +121,48 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
           _saveData();
         },
       ),
-      floatingActionButton: _getFloatingActionButton(),
+      floatingActionButton: _getFloatingActionButton(itemCount),
+    );
+  }
+
+  Widget _getListItemView(int i) {
+    Widget listTile = ListTile(
+      contentPadding: const EdgeInsets.only(
+        right: 10,
+        left: 0,
+        top: 5,
+        bottom: 5,
+      ),
+      trailing: _getListCountView(i),
+      title: Text(
+        CounterModel.list[i].title,
+        style: Styles.textHeader3,
+      ),
+      onTap: () => _showListEditPage(i),
+    );
+
+    if (!ShowcaseHelper.seen && i == 0) {
+      listTile = Showcase(
+        key: ShowcaseHelper.keyList[2],
+        title: 'ویرایش',
+        description: 'با زدن روی هر آیتم، میشه اون رو ویرایش کرد',
+        child: Showcase(
+          key: ShowcaseHelper.keyList[3],
+          title: 'ترتیب',
+          description: 'با نگه داشتن روی آیتم، میشه جا به جاش کرد',
+          child: listTile,
+        ),
+      );
+    }
+
+    return Container(
+      key: Key('$i'),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: listTile,
     );
   }
 
@@ -256,13 +273,37 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
     );
   }
 
-  Widget _getFloatingActionButton() {
+  Widget _getFloatingActionButton([int listCount = 0]) {
     return Showcase(
       key: ShowcaseHelper.keyList[0],
       description: 'یک آیتم جدید اضافه کن',
       child: FloatingActionButton(
         child: const Icon(Icons.add_rounded),
-        onPressed: () => _showListEditPage(null),
+        onPressed: () {
+          if (!AppConfig.isFullVersion &&
+              listCount >= AppConfig.limitItemCount) {
+            Show.dialog(
+              context,
+              'نسخه کامل',
+              'برای اضافه کردن بیش از 3 آیتم نسخه کامل برنامه رو خریداری کنید',
+              [
+                ElevatedButton(
+                  // style: ElevatedButton.styleFrom(),
+                  child: const Text('خرید'),
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    final result = await Iab.buyFullVersion();
+                    debugPrint('*** purchase result: $result');
+                    AppConfig.isFullVersion = result;
+                    Prefs.setFullVersionStatus(result);
+                  },
+                ),
+              ],
+            );
+          } else {
+            _showListEditPage(null);
+          }
+        },
       ),
     );
   }

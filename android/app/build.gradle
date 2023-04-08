@@ -56,6 +56,14 @@ android {
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+
+        // myket IAB
+        // def marketApplicationId = "ir.mservices.market"
+        // def marketBindAddress = "ir.mservices.market.InAppBillingService.BIND"
+        // manifestPlaceholders += [marketApplicationId: "${marketApplicationId}",
+        //     marketBindAddress  : "${marketBindAddress}",
+        //     marketPermission   : "${marketApplicationId}.BILLING"]
+
     }
 
     signingConfigs {
