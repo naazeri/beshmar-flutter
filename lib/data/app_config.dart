@@ -8,4 +8,6 @@ class AppConfig {
 
   static const isBazaarVersion = true;
   static const limitItemCount = 3;
+  static const shareLink =
+      'http://cafebazaar.ir/app/?id=ir.naazeri.beshmar&ref=share';
 }

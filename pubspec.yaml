@@ -39,7 +39,7 @@ dependencies:
   showcaseview: ^2.0.2
   introduction_screen: ^3.1.7
   package_info_plus: ^3.0.3
-  # myket_iap: ^1.1.1
+  share_plus: ^6.3.1
   flutter_poolakey: ^2.0.1
 
 

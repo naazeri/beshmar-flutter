@@ -1,5 +1,6 @@
 import 'package:beshmar/utils/changelog.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:holding_gesture/holding_gesture.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -229,29 +230,42 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
   }
 
   AppBar _getAppBar() {
+    const int backupValue = 1;
+    const int restoreValue = 2;
+    const int shareValue = 3;
+    const int changelogValue = 4;
+    const int aboutusValue = 5;
+
     return AppBar(
       title: AppBarTitle(widget.title),
       leading: PopupMenuButton(
         itemBuilder: (context) {
           return [
-            _getPopupMenuItem(1, "پشتیبان گیری اطلاعات"),
-            _getPopupMenuItem(2, "بازگردانی اطلاعات"),
-            _getPopupMenuItem(3, "تغییرات اخیر"),
-            _getPopupMenuItem(4, "درباره ما"),
+            _getPopupMenuItem(backupValue, "پشتیبان گیری اطلاعات"),
+            _getPopupMenuItem(restoreValue, "بازگردانی اطلاعات"),
+            _getPopupMenuItem(shareValue, "اشتراک گذاری اپ"),
+            _getPopupMenuItem(changelogValue, "تغییرات اخیر"),
+            _getPopupMenuItem(aboutusValue, "درباره ما"),
           ];
         },
         onSelected: (value) async {
           switch (value) {
-            case 1:
+            case backupValue:
               await Backup.backupData(_getDataAsString(), context);
               break;
-            case 2:
+            case restoreValue:
               _importData();
               break;
-            case 3:
+            case shareValue:
+              Share.share(
+                AppConfig.shareLink,
+                subject: '‏«بشمار» را در بازار اندروید ببین:',
+              );
+              break;
+            case changelogValue:
               ChangeLog.show(context);
               break;
-            case 4:
+            case aboutusValue:
               _launchUrl('https://naazeri.ir/');
               break;
             default:
