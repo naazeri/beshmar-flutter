@@ -8,7 +8,7 @@ class ChangeLog {
   static void show(BuildContext context) {
     if (ShowcaseHelper.seen &&
         AppConfig.currentBuildNumber > AppConfig.lastBuildNumber) {
-      Show.dialog(context, 'تغییرات', _getChangelogText(), [
+      Show.dialog(context, 'تغییرات اخیر', _getChangelogText(), [
         TextButton(
             onPressed: () {
               Navigator.of(context).pop();
@@ -19,59 +19,11 @@ class ChangeLog {
   }
 
   static String _getChangelogText() {
-    return """نسخه 1.1.0
-    - اضافه شدن
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 2
+    return """نسخه 1.1.0:
+    - امکان قفل کردن دکمه افزایش و کاهش تعداد
+    - نمایش تغییرات اخیر
+    - اضافه کردن دکمه به اشتراک گذاری اپ
+    - اصلاحات و بهبود های گرافیکی
     """;
   }
 }

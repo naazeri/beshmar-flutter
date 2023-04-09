@@ -307,7 +307,7 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
             Show.dialog(
               context,
               'نسخه کامل',
-              'برای اضافه کردن بیش از 3 آیتم نسخه کامل برنامه رو خریداری کنید',
+              'برای اضافه کردن بیش از 3 آیتم لطفا نسخه کامل برنامه رو خریداری کنید',
               [
                 ElevatedButton(
                   child: const Text('خرید'),
