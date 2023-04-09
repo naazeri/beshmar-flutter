@@ -22,7 +22,7 @@ Future<void> loadData() async {
   ShowcaseHelper.seen = await Prefs.getShowcaseStatus();
   AppConfig.isFullVersion = await Prefs.getFullVersionStatus();
   AppConfig.isCountingLocked = await Prefs.getCountingLock();
-  AppConfig.lastBuildNumber = await Prefs.getBuildNumber();
+  // AppConfig.lastBuildNumber = await Prefs.getBuildNumber();
   final result = await Prefs.getData();
 
   if (result != null) {
@@ -34,7 +34,8 @@ Future<void> loadAppInfo() async {
   final packageInfo = await PackageInfo.fromPlatform();
 
   AppConfig.appName = packageInfo.appName;
-  AppConfig.currentBuildNumber = int.parse(packageInfo.buildNumber);
+  // AppConfig.version = packageInfo.version;
+  // AppConfig.currentBuildNumber = int.parse(packageInfo.buildNumber);
 }
 
 class MyApp extends StatelessWidget {

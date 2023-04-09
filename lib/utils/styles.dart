@@ -20,4 +20,8 @@ class Styles {
     fontSize: 16.0,
     color: Colors.white,
   );
+
+  static const textHeader4 = TextStyle(
+    fontSize: 15.0,
+  );
 }

@@ -141,11 +141,11 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
     );
 
     if (!ShowcaseHelper.seen && i == 0) {
-      listTile = Showcase(
+      listTile = ShowcaseHelper.getShowcase(
         key: ShowcaseHelper.keyList[2],
         title: 'ویرایش',
         description: 'با زدن روی هر آیتم، میشه اون رو ویرایش کرد',
-        child: Showcase(
+        child: ShowcaseHelper.getShowcase(
           key: ShowcaseHelper.keyList[3],
           title: 'ترتیب',
           description: 'با نگه داشتن روی آیتم، میشه جا به جاش کرد',
@@ -185,7 +185,7 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
     );
 
     if (!ShowcaseHelper.seen && i == 0) {
-      addButton = Showcase(
+      addButton = ShowcaseHelper.getShowcase(
         key: ShowcaseHelper.keyList[1],
         title: 'افزایش',
         description:
@@ -259,7 +259,7 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
         },
       ),
       actions: [
-        Showcase(
+        ShowcaseHelper.getShowcase(
           key: ShowcaseHelper.keyList[4],
           title: 'قفل',
           description:
@@ -296,7 +296,7 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
   }
 
   Widget _getFloatingActionButton([int listCount = 0]) {
-    return Showcase(
+    return ShowcaseHelper.getShowcase(
       key: ShowcaseHelper.keyList[0],
       description: 'یک آیتم جدید اضافه کن',
       child: FloatingActionButton(
