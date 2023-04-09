@@ -34,6 +34,7 @@ class Show {
       builder: (_) => Directionality(
         textDirection: TextDirection.rtl,
         child: AlertDialog(
+          actionsAlignment: MainAxisAlignment.start,
           title: Text(title, style: Styles.textHeader1),
           content: SingleChildScrollView(
             child: Text(content, style: Styles.textHeader3),
