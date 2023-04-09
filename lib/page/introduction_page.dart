@@ -6,9 +6,7 @@ import '../utils/styles.dart';
 import 'home_page.dart';
 
 class IntroductionPage extends StatelessWidget {
-  final String homeTitle;
-
-  const IntroductionPage({required this.homeTitle, super.key});
+  const IntroductionPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +21,7 @@ class IntroductionPage extends StatelessWidget {
       onDone: () {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-            builder: (context) => HomePage(title: homeTitle),
+            builder: (context) => const HomePage(),
           ),
           (_) => false,
         );

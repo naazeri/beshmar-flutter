@@ -5,6 +5,7 @@ class Prefs {
   static const _showcaseKey = 'showcase_seen';
   static const _iabKey = 'iab';
   static const _countingLockKey = 'c_lock';
+  static const _buildNumberKey = 'b_n';
 
   static Future<bool> setData(String data) async {
     final prefs = await SharedPreferences.getInstance();
@@ -44,6 +45,16 @@ class Prefs {
   static Future<bool> getCountingLock() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_countingLockKey) ?? false;
+  }
+
+  static Future<bool> setBuildNumber(int value) async {
+    final prefs = await SharedPreferences.getInstance();
+    return await prefs.setInt(_buildNumberKey, value);
+  }
+
+  static Future<int> getBuildNumber() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_buildNumberKey) ?? 1;
   }
 
   void remove(String key) async {

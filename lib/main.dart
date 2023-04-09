@@ -1,5 +1,7 @@
 import 'package:beshmar/data/app_config.dart';
+import 'package:beshmar/utils/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'data/counter_model.dart';
 import 'page/home_page.dart';
@@ -10,6 +12,7 @@ import 'utils/showcase_helper.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await loadAppInfo();
   await loadData();
 
   runApp(const MyApp());
@@ -19,7 +22,7 @@ Future<void> loadData() async {
   ShowcaseHelper.seen = await Prefs.getShowcaseStatus();
   AppConfig.isFullVersion = await Prefs.getFullVersionStatus();
   AppConfig.isCountingLocked = await Prefs.getCountingLock();
-
+  AppConfig.lastBuildNumber = await Prefs.getBuildNumber();
   final result = await Prefs.getData();
 
   if (result != null) {
@@ -27,15 +30,20 @@ Future<void> loadData() async {
   }
 }
 
-class MyApp extends StatelessWidget {
-  final title = 'بشمار';
+Future<void> loadAppInfo() async {
+  final packageInfo = await PackageInfo.fromPlatform();
 
+  AppConfig.appName = packageInfo.appName;
+  AppConfig.currentBuildNumber = int.parse(packageInfo.buildNumber);
+}
+
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: title,
+      title: AppConfig.appName,
       debugShowCheckedModeBanner: true,
       theme: ThemeData(
         appBarTheme: AppBarTheme(
@@ -43,27 +51,12 @@ class MyApp extends StatelessWidget {
         ),
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.blue.shade400,
+        fontFamily: Styles.defaultFontFamily,
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: Colors.blue.shade900,
         ),
       ),
-      home: ShowcaseHelper.seen
-          ? HomePage(title: title)
-          : IntroductionPage(homeTitle: title),
-      // home: ShowCaseWidget(
-      //   autoPlayDelay: const Duration(seconds: 3),
-      //   builder: Builder(
-      //     builder: (context) => HomePage(title: title),
-      //   ),
-      //   onComplete: (index, key) {
-      //     if (index == ShowcaseHelper.keyList.length - 1) {
-      //       Prefs.setShowcaseStatus(true);
-      //     }
-      //   },
-      //   onFinish: () {
-      //     debugPrint('**** all showcases finished');
-      //   },
-      // ),
+      home: ShowcaseHelper.seen ? const HomePage() : const IntroductionPage(),
     );
   }
 }

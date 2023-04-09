@@ -1,3 +1,4 @@
+import 'package:beshmar/utils/changelog.dart';
 import 'package:flutter/material.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:holding_gesture/holding_gesture.dart';
@@ -19,9 +20,7 @@ import 'list_edit_item_page.dart';
 enum EditResultType { newItem, updated, deleted }
 
 class HomePage extends StatefulWidget {
-  final String title;
-
-  const HomePage({this.title = 'Home', super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -33,7 +32,7 @@ class _HomePageState extends State<HomePage> {
     return ShowCaseWidget(
       autoPlayDelay: const Duration(seconds: 3),
       builder: Builder(
-        builder: (context) => MyListView(title: widget.title),
+        builder: (context) => MyListView(title: AppConfig.appName),
       ),
       onComplete: (index, key) {
         if (index == ShowcaseHelper.keyList.length - 1) {
@@ -57,31 +56,31 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback(_onStateLoaded);
+  }
 
+  Future<void> _onStateLoaded(_) async {
     _initIab();
-
-    if (!ShowcaseHelper.seen) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ShowCaseWidget.of(context).startShowCase(ShowcaseHelper.keyList);
-      });
-    }
+    ShowcaseHelper.statrt(context);
   }
 
   Future<void> _initIab() async {
     await Iab.init();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final result = await Iab.checkIsFullVersionProduct();
-      AppConfig.isFullVersion = result;
-      Prefs.setFullVersionStatus(result);
-      debugPrint('*** Full version: $result');
-    });
+
+    final result = await Iab.checkIsFullVersionProduct();
+    AppConfig.isFullVersion = result;
+    Prefs.setFullVersionStatus(result);
+
+    debugPrint('*** Full version: $result');
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     Iab.dispose();
+
     super.dispose();
   }
 
@@ -233,26 +232,12 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
     return AppBar(
       title: AppBarTitle(widget.title),
       leading: PopupMenuButton(
-        // add icon, by default "3 dot" icon
-        // icon: Icon(Icons.book)
         itemBuilder: (context) {
           return [
-            // const PopupMenuItem<int>(
-            //   value: 0,
-            //   child: Text("تنظیمات"),
-            // ),
-            const PopupMenuItem<int>(
-              value: 1,
-              child: Text("پشتیبان گیری اطلاعات"),
-            ),
-            const PopupMenuItem<int>(
-              value: 2,
-              child: Text("بازگردانی اطلاعات"),
-            ),
-            const PopupMenuItem<int>(
-              value: 3,
-              child: Text('درباره ما'),
-            ),
+            _getPopupMenuItem(1, "پشتیبان گیری اطلاعات"),
+            _getPopupMenuItem(2, "بازگردانی اطلاعات"),
+            _getPopupMenuItem(3, "تغییرات اخیر"),
+            _getPopupMenuItem(4, "درباره ما"),
           ];
         },
         onSelected: (value) async {
@@ -264,6 +249,9 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
               _importData();
               break;
             case 3:
+              ChangeLog.show(context);
+              break;
+            case 4:
               _launchUrl('https://naazeri.ir/');
               break;
             default:
@@ -295,6 +283,18 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
     );
   }
 
+  PopupMenuItem<int> _getPopupMenuItem(final int value, final String text) {
+    return PopupMenuItem(
+      value: value,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(text),
+        ],
+      ),
+    );
+  }
+
   Widget _getFloatingActionButton([int listCount = 0]) {
     return Showcase(
       key: ShowcaseHelper.keyList[0],
@@ -309,12 +309,6 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
               'نسخه کامل',
               'برای اضافه کردن بیش از 3 آیتم نسخه کامل برنامه رو خریداری کنید',
               [
-                TextButton(
-                  child: const Text('انصراف'),
-                  onPressed: () async {
-                    Navigator.pop(context);
-                  },
-                ),
                 ElevatedButton(
                   child: const Text('خرید'),
                   onPressed: () async {
@@ -323,6 +317,12 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
                     debugPrint('*** purchase result: $result');
                     AppConfig.isFullVersion = result;
                     Prefs.setFullVersionStatus(result);
+                  },
+                ),
+                TextButton(
+                  child: const Text('انصراف'),
+                  onPressed: () async {
+                    Navigator.pop(context);
                   },
                 ),
               ],

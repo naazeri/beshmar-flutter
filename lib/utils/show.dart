@@ -1,3 +1,4 @@
+import 'package:beshmar/utils/styles.dart';
 import 'package:flutter/material.dart';
 
 class Show {
@@ -30,10 +31,15 @@ class Show {
     showDialog(
       context: context,
       barrierDismissible: true,
-      builder: (_) => AlertDialog(
-        title: Text(title),
-        content: Text(content),
-        actions: actions,
+      builder: (_) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          title: Text(title, style: Styles.textHeader1),
+          content: SingleChildScrollView(
+            child: Text(content, style: Styles.textHeader3),
+          ),
+          actions: actions,
+        ),
       ),
     );
   }
