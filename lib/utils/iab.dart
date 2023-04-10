@@ -14,7 +14,10 @@ class Iab {
     if (AppConfig.isBazaarVersion) {
       initialized = await FlutterPoolakey.connect(
         _bazaarRsa,
-        onDisconnected: () async {/*reconnect here*/},
+        onDisconnected: () async {
+          /*reconnect here*/
+          debugPrint('*** Disconnected');
+        },
       );
 
       debugPrint('*** Init: $initialized');

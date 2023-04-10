@@ -61,6 +61,12 @@ class ListItemView extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.grey.shade50,
         borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: Color(
+            CounterModel.list[index].color ?? Colors.grey.shade50.value,
+          ),
+          width: 2.7,
+        ),
       ),
       child: listTile,
     );

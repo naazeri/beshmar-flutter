@@ -5,17 +5,20 @@ class CounterModel {
 
   String title;
   int count;
+  int? color;
 
-  CounterModel({required this.title, this.count = 0});
+  CounterModel({required this.title, this.count = 0, this.color});
 
   Map<String, dynamic> toJson() => {
         'title': title,
         'count': count,
+        'color': color,
       };
 
   factory CounterModel.fromJson(Map<String, dynamic> json) => CounterModel(
         title: json['title'],
         count: json['count'],
+        color: json['color'],
       );
 
   static String encode(List<CounterModel> list) => json.encode(

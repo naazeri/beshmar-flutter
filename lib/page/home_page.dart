@@ -349,7 +349,12 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
   }
 
   Future<void> _launchUrl(String url) async {
-    if (!await launchUrl(Uri.parse(url))) {
+    final success = await launchUrl(
+      Uri.parse(url),
+      mode: LaunchMode.externalApplication,
+    );
+
+    if (!success) {
       // ignore: use_build_context_synchronously
       Show.snackBar(context, 'خطا در اجرای عملیات');
     }

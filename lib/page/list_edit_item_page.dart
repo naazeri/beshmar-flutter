@@ -1,8 +1,10 @@
+import 'package:beshmar/utils/styles.dart';
 import 'package:flutter/material.dart';
 
 import '../data/counter_model.dart';
 import '../data/edit_result_model.dart';
 import '../widget/app_bar_title.dart';
+import '../widget/color_list_picker.dart';
 import '../widget/my_outlined_button.dart';
 import '../widget/my_text_form_field.dart';
 import '../widget/scaffold_rtl.dart';
@@ -22,15 +24,16 @@ class _ListEditItemPageState extends State<ListEditItemPage> {
   final formKey = GlobalKey<FormState>();
   late final TextEditingController titleController;
   late final TextEditingController countController;
-  // bool validateTitle = true;
-  // bool validateCount = true;
+  int? selectedColor;
 
   @override
   void initState() {
+    super.initState();
+
     titleController = TextEditingController(text: widget.model?.title);
     countController =
         TextEditingController(text: widget.model?.count.toString());
-    super.initState();
+    selectedColor = widget.model?.color;
   }
 
   @override
@@ -48,35 +51,54 @@ class _ListEditItemPageState extends State<ListEditItemPage> {
       ),
       body: Container(
         color: Colors.white,
+        width: double.infinity,
+        height: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Form(
-          key: formKey,
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              MyTextFormField(
-                placeholder: 'عنوان',
-                icon: Icons.abc_rounded,
-                controller: titleController,
-                maxLength: 120,
-                validator: _titleFieldValidator,
-                keyboardType: TextInputType.text,
-                onFieldSubmitted: _onSubmitPressed,
-              ),
-              const SizedBox(height: 16),
-              MyTextFormField(
-                placeholder: 'تعداد',
-                icon: Icons.numbers_rounded,
-                controller: countController,
-                maxLength: 7,
-                textAlign: TextAlign.center,
-                validator: _countFieldValidator,
-                keyboardType: TextInputType.number,
-                onFieldSubmitted: _onSubmitPressed,
-              ),
-              const SizedBox(height: 15),
-              _getButtons(context),
-            ],
+        child: SingleChildScrollView(
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                MyTextFormField(
+                  placeholder: 'عنوان',
+                  icon: Icons.abc_rounded,
+                  controller: titleController,
+                  maxLength: 120,
+                  validator: _titleFieldValidator,
+                  keyboardType: TextInputType.text,
+                  onFieldSubmitted: _onSubmitPressed,
+                ),
+                const SizedBox(height: 16),
+                MyTextFormField(
+                  placeholder: 'تعداد',
+                  icon: Icons.numbers_rounded,
+                  controller: countController,
+                  maxLength: 7,
+                  textAlign: TextAlign.center,
+                  validator: _countFieldValidator,
+                  keyboardType: TextInputType.number,
+                  onFieldSubmitted: _onSubmitPressed,
+                ),
+                const SizedBox(height: 15),
+                Row(
+                  children: const [
+                    SizedBox(width: 5),
+                    Text('رنگ', style: Styles.textHeader3),
+                  ],
+                ),
+                const SizedBox(height: 15),
+                ColorListPicker(
+                  currentColor:
+                      selectedColor != null ? Color(selectedColor!) : null,
+                  onTap: (color) {
+                    selectedColor = color?.value;
+                  },
+                ),
+                const SizedBox(height: 50),
+                _getButtons(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -109,7 +131,7 @@ class _ListEditItemPageState extends State<ListEditItemPage> {
   }
 
   String? _titleFieldValidator(String? text) {
-    if (text == null || text.isEmpty || text == ' ') {
+    if (text == null || text.isEmpty || text.trim().isEmpty) {
       return 'لطفا مقدار را وارد کنید';
     }
 
@@ -117,7 +139,7 @@ class _ListEditItemPageState extends State<ListEditItemPage> {
   }
 
   String? _countFieldValidator(String? text) {
-    if (text == null || text.isEmpty || text == ' ') {
+    if (text == null || text.isEmpty || text.trim().isEmpty) {
       return 'لطفا مقدار را وارد کنید';
     }
 
@@ -135,17 +157,10 @@ class _ListEditItemPageState extends State<ListEditItemPage> {
       return;
     }
 
-    var trimmedTitle = titleController.text.trim();
-
-    if (trimmedTitle.isEmpty || trimmedTitle == ' ') {
-      Navigator.pop(context);
-      return;
-    }
-
     final newModel = CounterModel(
-      title: trimmedTitle, // maybe be empty
-      count: int.parse(countController.text),
-    );
+        title: titleController.text,
+        count: int.parse(countController.text),
+        color: selectedColor);
 
     Navigator.pop(
       context,
