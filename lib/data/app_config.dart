@@ -6,8 +6,10 @@ class AppConfig {
   // static int lastBuildNumber = 0;
   static String appName = '';
 
+  static const devMode = false;
   static const isBazaarVersion = true;
   static const limitItemCount = 3;
+  static const aboutUsLink = 'https://naazeri.ir/';
   static const shareLink =
       'http://cafebazaar.ir/app/?id=ir.naazeri.beshmar&ref=share';
 }

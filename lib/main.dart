@@ -15,6 +15,10 @@ Future<void> main() async {
   await loadAppInfo();
   await loadData();
 
+  // if (AppConfig.devMode) {
+  //   ShowcaseHelper.seen = true;
+  // }
+
   runApp(const MyApp());
 }
 

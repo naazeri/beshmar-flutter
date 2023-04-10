@@ -1,8 +1,8 @@
 import 'package:beshmar/utils/changelog.dart';
+import 'package:beshmar/widget/list_item_view.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:showcaseview/showcaseview.dart';
-import 'package:holding_gesture/holding_gesture.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../data/app_config.dart';
@@ -13,7 +13,6 @@ import '../utils/iab.dart';
 import '../utils/prefs.dart';
 import '../utils/show.dart';
 import '../utils/showcase_helper.dart';
-import '../utils/styles.dart';
 import '../widget/app_bar_title.dart';
 import '../widget/scaffold_rtl.dart';
 import 'list_edit_item_page.dart';
@@ -107,7 +106,16 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
         header: const SizedBox(height: 10),
         footer: const SizedBox(height: 75),
         itemCount: itemCount,
-        itemBuilder: (context, i) => _getListItemView(i),
+        itemBuilder: (context, i) => ListItemView(
+          key: Key('$i'),
+          index: i,
+          onItemTap: () => _showListEditPage(i),
+          onAddPressed: () => _addNumber(i, 1, needSave: true),
+          onAddHold: () => _addNumber(i, 1, needSave: false),
+          onSubtractPressed: () => _addNumber(i, -1, needSave: true),
+          onSubtractHold: () => _addNumber(i, -1, needSave: false),
+          onCancel: () => _saveData(),
+        ),
         onReorder: (int oldIndex, int newIndex) {
           setState(() {
             if (oldIndex < newIndex) {
@@ -122,110 +130,6 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
         },
       ),
       floatingActionButton: _getFloatingActionButton(itemCount),
-    );
-  }
-
-  Widget _getListItemView(int i) {
-    Widget listTile = ListTile(
-      contentPadding: const EdgeInsets.only(
-        right: 10,
-        left: 0,
-        top: 5,
-        bottom: 5,
-      ),
-      trailing: _getListCountView(i),
-      title: Text(
-        CounterModel.list[i].title,
-        style: Styles.textHeader3,
-      ),
-      onTap: () => _showListEditPage(i),
-    );
-
-    if (!ShowcaseHelper.seen && i == 0) {
-      listTile = ShowcaseHelper.getShowcase(
-        key: ShowcaseHelper.keyList[2],
-        title: 'ویرایش',
-        description: 'با زدن روی هر آیتم، میشه اون رو ویرایش کرد',
-        child: ShowcaseHelper.getShowcase(
-          key: ShowcaseHelper.keyList[3],
-          title: 'ترتیب',
-          description: 'با نگه داشتن روی آیتم، میشه جا به جاش کرد',
-          child: listTile,
-        ),
-      );
-    }
-
-    return Container(
-      key: Key('$i'),
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade50,
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: listTile,
-    );
-  }
-
-  Row _getListCountView(int i) {
-    const holdTimeout = 100;
-
-    Widget addButton = HoldDetector(
-      onHold: () => _addNumber(i, 1, needSave: false),
-      onCancel: () {
-        _saveData();
-      },
-      holdTimeout: const Duration(milliseconds: holdTimeout),
-      child: IconButton(
-        onPressed: () => _addNumber(i, 1),
-        icon: Icon(
-          Icons.add_circle_outline_rounded,
-          color: Theme.of(context).primaryColor,
-          size: 28.0,
-        ),
-      ),
-    );
-
-    if (!ShowcaseHelper.seen && i == 0) {
-      addButton = ShowcaseHelper.getShowcase(
-        key: ShowcaseHelper.keyList[1],
-        title: 'افزایش',
-        description:
-            'با نگه داشتن این دکمه با سرعت بیشتری تعداد افزایش پیدا میکنه',
-        child: addButton,
-      );
-    }
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        addButton,
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-          decoration: BoxDecoration(
-            color: Colors.grey.shade300,
-            borderRadius: BorderRadius.circular(200),
-          ),
-          child: Text(
-            CounterModel.list[i].count.toString(),
-            style: Styles.textHeader3,
-          ),
-        ),
-        HoldDetector(
-          onHold: () => _addNumber(i, -1, needSave: false),
-          onCancel: () {
-            _saveData();
-          },
-          holdTimeout: const Duration(milliseconds: holdTimeout),
-          child: IconButton(
-            onPressed: () => _addNumber(i, -1),
-            icon: Icon(
-              Icons.remove_circle_outline_rounded,
-              color: Theme.of(context).primaryColor,
-              size: 28.0,
-            ),
-          ),
-        ),
-      ],
     );
   }
 
@@ -266,7 +170,7 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
               ChangeLog.show(context);
               break;
             case aboutusValue:
-              _launchUrl('https://naazeri.ir/');
+              _launchUrl(AppConfig.aboutUsLink);
               break;
             default:
           }
@@ -284,12 +188,7 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
                   ? Icons.lock_rounded
                   : Icons.lock_open_rounded,
             ),
-            onPressed: () {
-              setState(() {
-                AppConfig.isCountingLocked = !AppConfig.isCountingLocked;
-                Prefs.setCountingLock(AppConfig.isCountingLocked);
-              });
-            },
+            onPressed: _swapLockMode,
           ),
         ),
         const SizedBox(width: 30),
@@ -454,5 +353,13 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
       // ignore: use_build_context_synchronously
       Show.snackBar(context, 'خطا در اجرای عملیات');
     }
+  }
+
+  void _swapLockMode() {
+    setState(() {
+      AppConfig.isCountingLocked = !AppConfig.isCountingLocked;
+    });
+
+    Prefs.setCountingLock(AppConfig.isCountingLocked);
   }
 }
