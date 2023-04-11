@@ -16,6 +16,11 @@ class Styles {
     fontSize: 16.0,
   );
 
+  static const textHeader3Bold = TextStyle(
+    fontSize: 16.0,
+    fontWeight: FontWeight.bold,
+  );
+
   static const textHeader3White = TextStyle(
     fontSize: 16.0,
     color: Colors.white,

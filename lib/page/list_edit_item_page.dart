@@ -84,7 +84,7 @@ class _ListEditItemPageState extends State<ListEditItemPage> {
                 Row(
                   children: const [
                     SizedBox(width: 5),
-                    Text('رنگ', style: Styles.textHeader3),
+                    Text('رنگ', style: Styles.textHeader3Bold),
                   ],
                 ),
                 const SizedBox(height: 15),
