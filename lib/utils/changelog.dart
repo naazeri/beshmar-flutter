@@ -5,10 +5,11 @@ class ChangeLog {
   static void show(BuildContext context) {
     Show.dialog(context, 'تغییرات اخیر', _getChangelogText(), [
       TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('بستن'))
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: const Text('بستن'),
+      )
     ]);
   }
 

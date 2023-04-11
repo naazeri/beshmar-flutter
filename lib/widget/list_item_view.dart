@@ -59,14 +59,22 @@ class ListItemView extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        color: Styles.listCardBackgroundColor,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: Color(
-            CounterModel.list[index].color ?? Colors.grey.shade50.value,
+            CounterModel.list[index].color ??
+                Styles.listCardBackgroundColor.value,
           ),
-          width: 2.7,
+          width: 3.5,
         ),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.grey.shade600,
+        //     spreadRadius: 0.5,
+        //     blurRadius: 4,
+        //   )
+        // ],
       ),
       child: listTile,
     );

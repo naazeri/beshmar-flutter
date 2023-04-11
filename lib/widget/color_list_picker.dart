@@ -32,16 +32,16 @@ class _ColorListPickerState extends State<ColorListPicker> {
       children: [
         _getRow([
           _getCircle(null),
-          _getCircle(Colors.amber),
-          _getCircle(Colors.green),
-          _getCircle(Colors.redAccent.shade700),
+          _getCircle(Colors.amber.shade400),
+          _getCircle(Colors.green.shade800),
+          _getCircle(Colors.red.shade900),
         ]),
         _getSizedBox(),
         _getRow([
           _getCircle(Colors.pinkAccent.shade200),
           _getCircle(Colors.indigo.shade700),
           _getCircle(Colors.purple.shade600),
-          _getCircle(Colors.brown.shade600),
+          _getCircle(Colors.orange.shade800),
         ]),
       ],
     );

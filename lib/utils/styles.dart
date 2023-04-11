@@ -24,4 +24,6 @@ class Styles {
   static const textHeader4 = TextStyle(
     fontSize: 15.0,
   );
+
+  static final listCardBackgroundColor = Colors.grey.shade50;
 }

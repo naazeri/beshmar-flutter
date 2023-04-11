@@ -5,8 +5,12 @@ class ScaffoldRTL extends StatelessWidget {
   final Widget? body;
   final Widget? floatingActionButton;
 
-  const ScaffoldRTL(
-      {this.appBar, this.body, this.floatingActionButton, super.key});
+  const ScaffoldRTL({
+    this.appBar,
+    this.body,
+    this.floatingActionButton,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

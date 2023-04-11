@@ -119,12 +119,14 @@ class _ListEditItemPageState extends State<ListEditItemPage> {
     );
 
     if (widget.model != null) {
-      row.children.add(MyOutlinedButton(
-        text: 'حذف',
-        textColor: Colors.red,
-        borderColor: Colors.red,
-        onPressed: _onDeletePressed,
-      ));
+      row.children.add(
+        MyOutlinedButton(
+          text: 'حذف',
+          textColor: Colors.red,
+          borderColor: Colors.red,
+          onPressed: _onDeletePressed,
+        ),
+      );
     }
 
     return row;
@@ -158,9 +160,10 @@ class _ListEditItemPageState extends State<ListEditItemPage> {
     }
 
     final newModel = CounterModel(
-        title: titleController.text,
-        count: int.parse(countController.text),
-        color: selectedColor);
+      title: titleController.text,
+      count: int.parse(countController.text),
+      color: selectedColor,
+    );
 
     Navigator.pop(
       context,
@@ -176,10 +179,11 @@ class _ListEditItemPageState extends State<ListEditItemPage> {
 
   _onDeletePressed() {
     Navigator.pop(
-        context,
-        EditResultModel(
-          editType: EditResultType.deleted,
-          index: widget.index,
-        ));
+      context,
+      EditResultModel(
+        editType: EditResultType.deleted,
+        index: widget.index,
+      ),
+    );
   }
 }

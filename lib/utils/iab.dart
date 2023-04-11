@@ -42,8 +42,9 @@ class Iab {
     if (AppConfig.isBazaarVersion) {
       try {
         PurchaseInfo purchaseInfo = await FlutterPoolakey.purchase(
-            _bazaarProductIdFullVersion,
-            payload: _payload);
+          _bazaarProductIdFullVersion,
+          payload: _payload,
+        );
 
         if (purchaseInfo.productId == _bazaarProductIdFullVersion &&
             purchaseInfo.payload == _payload) {
