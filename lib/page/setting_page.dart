@@ -35,9 +35,19 @@ class _SettingPageState extends State<SettingPage> {
         child: ListView(
           children: [
             const SizedBox(height: 20),
-            Text(
-              'اندازه متن: ${AppConfig.fontSize.round()}',
-              style: Styles.textHeader3,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'اندازه متن: ${AppConfig.fontSize.round()}',
+                  style: Styles.textNormal,
+                ),
+                Text(
+                  'مقدار پیشنهادی: 16',
+                  style:
+                      Styles.textSmall2.copyWith(color: Colors.grey.shade500),
+                ),
+              ],
             ),
             Slider(
               value: AppConfig.fontSize,

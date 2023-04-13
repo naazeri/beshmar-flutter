@@ -42,7 +42,7 @@ class IntroductionPage extends StatelessWidget {
     final pageDecoration = PageDecoration(
       pageColor: Colors.blue.shade400,
       titleTextStyle: Styles.textHeader1.copyWith(color: Colors.white),
-      bodyTextStyle: Styles.textHeader3White,
+      bodyTextStyle: Styles.textNormalWhite,
     );
     final imageWidth = Responsive.getScreenSize(context).width * 0.45;
     const double borderRadius = 1000.0;

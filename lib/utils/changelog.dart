@@ -12,7 +12,7 @@ class ChangeLog {
         },
         child: Text(
           'بستن',
-          style: Styles.textHeader3,
+          style: Styles.textNormal,
         ),
       )
     ]);

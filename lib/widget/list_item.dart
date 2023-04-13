@@ -37,7 +37,7 @@ class ListItem extends StatelessWidget {
       trailing: _getListCountView(index, context),
       title: Text(
         CounterModel.list[index].title,
-        style: Styles.textHeader3,
+        style: Styles.textNormal,
       ),
       onTap: onItemTap,
     );
@@ -120,7 +120,7 @@ class ListItem extends StatelessWidget {
           ),
           child: Text(
             CounterModel.list[i].count.toString(),
-            style: Styles.textHeader3,
+            style: Styles.textNormal,
           ),
         ),
         HoldDetector(

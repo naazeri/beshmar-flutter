@@ -18,7 +18,7 @@ class Show {
       SnackBar(
         content: Text(
           text,
-          style: Styles.textHeader3.copyWith(
+          style: Styles.textNormal.copyWith(
             fontFamily: Styles.defaultFontFamily,
           ),
         ),
@@ -42,7 +42,7 @@ class Show {
           actionsAlignment: MainAxisAlignment.start,
           title: Text(title, style: Styles.textHeader1),
           content: SingleChildScrollView(
-            child: Text(content, style: Styles.textHeader3),
+            child: Text(content, style: Styles.textNormal),
           ),
           actions: actions,
         ),

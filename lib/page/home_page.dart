@@ -211,7 +211,7 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
         children: [
           Text(
             text,
-            style: Styles.textHeader3,
+            style: Styles.textNormal,
           ),
         ],
       ),
@@ -235,7 +235,7 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
                 ElevatedButton(
                   child: Text(
                     'خرید',
-                    style: Styles.textHeader3White,
+                    style: Styles.textNormalWhite,
                   ),
                   onPressed: () async {
                     Navigator.pop(context);
@@ -248,7 +248,7 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
                 TextButton(
                   child: Text(
                     'انصراف',
-                    style: Styles.textHeader3,
+                    style: Styles.textNormal,
                   ),
                   onPressed: () async {
                     Navigator.pop(context);

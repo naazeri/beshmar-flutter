@@ -7,10 +7,11 @@ class Styles {
 
   static late TextStyle textHeader1;
   static late TextStyle textHeader2;
-  static late TextStyle textHeader3;
-  static late TextStyle textHeader3Bold;
-  static late TextStyle textHeader3White;
-  static late TextStyle textHeader4;
+  static late TextStyle textNormal;
+  static late TextStyle textNormalBold;
+  static late TextStyle textNormalWhite;
+  static late TextStyle textSmall1;
+  static late TextStyle textSmall2;
 
   static void updateStyles() {
     textHeader1 = TextStyle(
@@ -22,22 +23,26 @@ class Styles {
       fontSize: AppConfig.fontSize + 2.0,
     );
 
-    textHeader3 = TextStyle(
+    textNormal = TextStyle(
       fontSize: AppConfig.fontSize,
     );
 
-    textHeader3Bold = TextStyle(
+    textNormalBold = TextStyle(
       fontSize: AppConfig.fontSize,
       fontWeight: FontWeight.bold,
     );
 
-    textHeader3White = TextStyle(
+    textNormalWhite = TextStyle(
       fontSize: AppConfig.fontSize,
       color: Colors.white,
     );
 
-    textHeader4 = TextStyle(
+    textSmall1 = TextStyle(
       fontSize: AppConfig.fontSize - 1.0,
+    );
+
+    textSmall2 = TextStyle(
+      fontSize: AppConfig.fontSize - 2.0,
     );
   }
 }

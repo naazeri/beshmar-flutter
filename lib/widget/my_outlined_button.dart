@@ -28,7 +28,7 @@ class MyOutlinedButton extends StatelessWidget {
           color: borderColor ?? Theme.of(context).primaryColor,
         ),
       ),
-      child: Text(text, style: Styles.textHeader3),
+      child: Text(text, style: Styles.textNormal),
     );
   }
 }

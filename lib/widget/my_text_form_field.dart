@@ -44,7 +44,7 @@ class MyTextFormField extends StatelessWidget {
       validator: validator,
       maxLength: maxLength,
       textAlign: textAlign,
-      style: Styles.textHeader3,
+      style: Styles.textNormal,
       keyboardType: keyboardType,
       decoration: InputDecoration(
         labelText: placeholder,

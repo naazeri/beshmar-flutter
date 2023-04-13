@@ -21,7 +21,7 @@ class ShowcaseHelper {
     return Showcase(
       titleAlignment: TextAlign.end,
       descriptionAlignment: TextAlign.end,
-      descTextStyle: Styles.textHeader4,
+      descTextStyle: Styles.textSmall1,
       titlePadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
       // descriptionPadding:
       //     const EdgeInsets.symmetric(horizontal: 3, vertical: 2),

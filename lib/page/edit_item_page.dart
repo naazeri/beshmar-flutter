@@ -84,7 +84,7 @@ class _EditItemPageState extends State<EditItemPage> {
                 Row(
                   children: [
                     const SizedBox(width: 5),
-                    Text('رنگ', style: Styles.textHeader3Bold),
+                    Text('رنگ', style: Styles.textNormalBold),
                   ],
                 ),
                 const SizedBox(height: 15),
