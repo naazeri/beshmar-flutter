@@ -45,15 +45,10 @@ class ListItem extends StatelessWidget {
     if (!ShowcaseHelper.seen && index == 0) {
       listTile = ShowcaseHelper.getShowcase(
         key: ShowcaseHelper.keyList[2],
-        // TODO: merge these two showcase
-        title: 'ویرایش',
-        description: 'با زدن روی هر آیتم، میشه اون رو ویرایش کرد',
-        child: ShowcaseHelper.getShowcase(
-          key: ShowcaseHelper.keyList[3],
-          title: 'ترتیب',
-          description: 'با نگه داشتن روی آیتم، میشه جا به جاش کرد',
-          child: listTile,
-        ),
+        title: 'ویرایش و ترتیب',
+        description:
+            'با زدن روی هر آیتم، میشه اون رو ویرایش کرد\nو با نگه داشتن، میشه جا به جاش کرد',
+        child: listTile,
       );
     }
 

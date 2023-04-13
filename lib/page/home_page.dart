@@ -185,7 +185,7 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
       ),
       actions: [
         ShowcaseHelper.getShowcase(
-          key: ShowcaseHelper.keyList[4],
+          key: ShowcaseHelper.keyList[3],
           title: 'قفل',
           description:
               'برای اینکه اشتباهی دستت نخوره و تعداد رو تغییر بدی می تونی قفلش کنی',

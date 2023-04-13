@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 class ShowcaseHelper {
-  static List<GlobalKey> keyList = List.generate(5, (index) => GlobalKey());
+  static List<GlobalKey> keyList = List.generate(4, (index) => GlobalKey());
   static bool seen = false;
 
   static statrt(BuildContext context) {
@@ -23,8 +23,6 @@ class ShowcaseHelper {
       descriptionAlignment: TextAlign.end,
       descTextStyle: Styles.textSmall1,
       titlePadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
-      // descriptionPadding:
-      //     const EdgeInsets.symmetric(horizontal: 3, vertical: 2),
       key: key,
       title: title,
       description: description,
