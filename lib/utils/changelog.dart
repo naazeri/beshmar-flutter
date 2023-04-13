@@ -1,6 +1,8 @@
 import 'package:beshmar/utils/show.dart';
 import 'package:flutter/material.dart';
 
+import 'styles.dart';
+
 class ChangeLog {
   static void show(BuildContext context) {
     Show.dialog(context, 'تغییرات اخیر', _getChangelogText(), [
@@ -8,7 +10,10 @@ class ChangeLog {
         onPressed: () {
           Navigator.of(context).pop();
         },
-        child: const Text('بستن'),
+        child: Text(
+          'بستن',
+          style: Styles.textHeader3,
+        ),
       )
     ]);
   }

@@ -5,7 +5,7 @@ class Prefs {
   static const _showcaseKey = 'showcase_seen';
   static const _iabKey = 'iab';
   static const _countingLockKey = 'c_lock';
-  // static const _buildNumberKey = 'b_n';
+  static const _fontSizeKey = 'f_size';
 
   static Future<bool> setData(String data) async {
     final prefs = await SharedPreferences.getInstance();
@@ -47,15 +47,15 @@ class Prefs {
     return prefs.getBool(_countingLockKey) ?? false;
   }
 
-  // static Future<bool> setBuildNumber(int value) async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   return await prefs.setInt(_buildNumberKey, value);
-  // }
+  static Future<bool> setFontSize(double value) async {
+    final prefs = await SharedPreferences.getInstance();
+    return await prefs.setDouble(_fontSizeKey, value);
+  }
 
-  // static Future<int> getBuildNumber() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   return prefs.getInt(_buildNumberKey) ?? 1;
-  // }
+  static Future<double> getFontSize() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getDouble(_fontSizeKey) ?? 16;
+  }
 
   void remove(String key) async {
     final prefs = await SharedPreferences.getInstance();

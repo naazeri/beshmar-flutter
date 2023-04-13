@@ -22,24 +22,27 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
+Future<void> loadAppInfo() async {
+  final packageInfo = await PackageInfo.fromPlatform();
+
+  AppConfig.appName = packageInfo.appName;
+  AppConfig.packageName = packageInfo.packageName;
+  // AppConfig.currentBuildNumber = int.parse(packageInfo.buildNumber);
+}
+
 Future<void> loadData() async {
   ShowcaseHelper.seen = await Prefs.getShowcaseStatus();
   AppConfig.isFullVersion = await Prefs.getFullVersionStatus();
   AppConfig.isCountingLocked = await Prefs.getCountingLock();
-  // AppConfig.lastBuildNumber = await Prefs.getBuildNumber();
+
+  AppConfig.fontSize = await Prefs.getFontSize();
+  Styles.updateStyles();
+
   final result = await Prefs.getData();
 
   if (result != null) {
     CounterModel.list = CounterModel.decode(result);
   }
-}
-
-Future<void> loadAppInfo() async {
-  final packageInfo = await PackageInfo.fromPlatform();
-
-  AppConfig.appName = packageInfo.appName;
-  // AppConfig.version = packageInfo.version;
-  // AppConfig.currentBuildNumber = int.parse(packageInfo.buildNumber);
 }
 
 class MyApp extends StatelessWidget {

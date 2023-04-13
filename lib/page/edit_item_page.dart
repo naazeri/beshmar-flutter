@@ -10,17 +10,17 @@ import '../widget/my_text_form_field.dart';
 import '../widget/scaffold_rtl.dart';
 import 'home_page.dart';
 
-class ListEditItemPage extends StatefulWidget {
+class EditItemPage extends StatefulWidget {
   final CounterModel? model;
   final int? index;
 
-  const ListEditItemPage({this.model, this.index, Key? key}) : super(key: key);
+  const EditItemPage({this.model, this.index, Key? key}) : super(key: key);
 
   @override
-  State<ListEditItemPage> createState() => _ListEditItemPageState();
+  State<EditItemPage> createState() => _EditItemPageState();
 }
 
-class _ListEditItemPageState extends State<ListEditItemPage> {
+class _EditItemPageState extends State<EditItemPage> {
   final formKey = GlobalKey<FormState>();
   late final TextEditingController titleController;
   late final TextEditingController countController;
@@ -82,8 +82,8 @@ class _ListEditItemPageState extends State<ListEditItemPage> {
                 ),
                 const SizedBox(height: 15),
                 Row(
-                  children: const [
-                    SizedBox(width: 5),
+                  children: [
+                    const SizedBox(width: 5),
                     Text('رنگ', style: Styles.textHeader3Bold),
                   ],
                 ),

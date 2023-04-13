@@ -5,6 +5,8 @@ class AppConfig {
   // static int currentBuildNumber = 0;
   // static int lastBuildNumber = 0;
   static String appName = '';
+  static String packageName = '';
+  static double fontSize = 16;
 
   static const devMode = false;
   static const isBazaarVersion = true;

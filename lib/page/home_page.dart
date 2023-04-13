@@ -1,5 +1,6 @@
 import 'package:beshmar/utils/changelog.dart';
-import 'package:beshmar/widget/list_item_view.dart';
+import 'package:beshmar/utils/styles.dart';
+import 'package:beshmar/widget/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:showcaseview/showcaseview.dart';
@@ -15,7 +16,8 @@ import '../utils/show.dart';
 import '../utils/showcase_helper.dart';
 import '../widget/app_bar_title.dart';
 import '../widget/scaffold_rtl.dart';
-import 'list_edit_item_page.dart';
+import 'edit_item_page.dart';
+import 'setting_page.dart';
 
 enum EditResultType { newItem, updated, deleted }
 
@@ -106,7 +108,7 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
         header: const SizedBox(height: 10),
         footer: const SizedBox(height: 75),
         itemCount: itemCount,
-        itemBuilder: (context, i) => ListItemView(
+        itemBuilder: (context, i) => ListItem(
           key: Key('$i'),
           index: i,
           onItemTap: () => _showListEditPage(i),
@@ -139,12 +141,14 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
     const int shareValue = 3;
     const int changelogValue = 4;
     const int aboutusValue = 5;
+    const int settingValue = 6;
 
     return AppBar(
       title: AppBarTitle(widget.title),
       leading: PopupMenuButton(
         itemBuilder: (context) {
           return [
+            _getPopupMenuItem(settingValue, "تنظیمات"),
             _getPopupMenuItem(backupValue, "پشتیبان گیری اطلاعات"),
             _getPopupMenuItem(restoreValue, "بازگردانی اطلاعات"),
             _getPopupMenuItem(shareValue, "اشتراک گذاری اپ"),
@@ -171,6 +175,9 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
               break;
             case aboutusValue:
               _launchUrl(AppConfig.aboutUsLink);
+              break;
+            case settingValue:
+              _showSettingPage();
               break;
             default:
           }
@@ -202,7 +209,10 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Text(text),
+          Text(
+            text,
+            style: Styles.textHeader3,
+          ),
         ],
       ),
     );
@@ -223,7 +233,10 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
               'برای اضافه کردن بیش از 3 آیتم لطفا نسخه کامل برنامه رو خریداری کنید',
               [
                 ElevatedButton(
-                  child: const Text('خرید'),
+                  child: Text(
+                    'خرید',
+                    style: Styles.textHeader3White,
+                  ),
                   onPressed: () async {
                     Navigator.pop(context);
                     final result = await Iab.buyFullVersion();
@@ -233,7 +246,10 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
                   },
                 ),
                 TextButton(
-                  child: const Text('انصراف'),
+                  child: Text(
+                    'انصراف',
+                    style: Styles.textHeader3,
+                  ),
                   onPressed: () async {
                     Navigator.pop(context);
                   },
@@ -271,15 +287,24 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ListEditItemPage(
+        builder: (context) => EditItemPage(
           model: index != null ? CounterModel.list[index] : null,
           index: index,
         ),
       ),
-    ).then(_onNavigatorResult);
+    ).then(_onEditItemResult);
   }
 
-  void _onNavigatorResult(dynamic result) {
+  void _showSettingPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SettingPage(),
+      ),
+    ).then(_onSettingResult);
+  }
+
+  void _onEditItemResult(dynamic result) {
     if (result is EditResultModel) {
       switch (result.editType) {
         case EditResultType.newItem:
@@ -308,6 +333,10 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
 
       _saveData();
     }
+  }
+
+  void _onSettingResult(_) {
+    setState(() {});
   }
 
   Future<bool> _saveData() async {

@@ -16,7 +16,12 @@ class Show {
 
     scaffold.showSnackBar(
       SnackBar(
-        content: Text(text),
+        content: Text(
+          text,
+          style: Styles.textHeader3.copyWith(
+            fontFamily: Styles.defaultFontFamily,
+          ),
+        ),
         duration: Duration(seconds: seconds),
       ),
     );

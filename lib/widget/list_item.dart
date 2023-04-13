@@ -5,7 +5,7 @@ import '../data/counter_model.dart';
 import '../utils/showcase_helper.dart';
 import '../utils/styles.dart';
 
-class ListItemView extends StatelessWidget {
+class ListItem extends StatelessWidget {
   final int index;
   final void Function()? onItemTap;
   final void Function() onAddHold;
@@ -14,7 +14,7 @@ class ListItemView extends StatelessWidget {
   final void Function() onSubtractPressed;
   final void Function()? onCancel;
 
-  const ListItemView({
+  const ListItem({
     super.key,
     required this.index,
     this.onItemTap,
@@ -45,6 +45,7 @@ class ListItemView extends StatelessWidget {
     if (!ShowcaseHelper.seen && index == 0) {
       listTile = ShowcaseHelper.getShowcase(
         key: ShowcaseHelper.keyList[2],
+        // TODO: merge these two showcase
         title: 'ویرایش',
         description: 'با زدن روی هر آیتم، میشه اون رو ویرایش کرد',
         child: ShowcaseHelper.getShowcase(
