@@ -38,7 +38,11 @@ class _HomePageState extends State<HomePage> {
       ),
       onComplete: (index, key) {
         if (index == ShowcaseHelper.keyList.length - 1) {
-          Prefs.setShowcaseStatus(true);
+          setState(() {
+            ShowcaseHelper.seen = true;
+          });
+
+          Prefs.setShowcaseStatus(ShowcaseHelper.seen);
         }
       },
     );
