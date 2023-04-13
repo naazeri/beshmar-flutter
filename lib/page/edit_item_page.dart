@@ -95,8 +95,9 @@ class _EditItemPageState extends State<EditItemPage> {
                     selectedColor = color?.value;
                   },
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 55),
                 _getButtons(context),
+                const SizedBox(height: 25),
               ],
             ),
           ),
