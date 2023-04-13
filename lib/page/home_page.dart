@@ -336,6 +336,7 @@ class _MyListViewState extends State<MyListView> with WidgetsBindingObserver {
   }
 
   void _onSettingResult(_) {
+    // just empty setState for update settings
     setState(() {});
   }
 
